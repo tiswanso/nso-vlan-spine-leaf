@@ -1,0 +1,10 @@
+*~
+*.pyc
+.idea/
+.inventory_checksums.p
+.venv/
+.tox/
+*.egg-info/
+dist/
+AUTHORS
+ChangeLog

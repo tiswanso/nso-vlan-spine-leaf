@@ -1,0 +1,62 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <device>
+      <name>{$DEV}</name>
+      <config>
+        <vlan xmlns="urn:ios">
+          <vlan-list tags="merge">
+            <id>{/vlan-id}</id>
+          </vlan-list>
+        </vlan>
+        <vlan xmlns="http://tail-f.com/ned/cisco-nx">
+          <vlan-list tags="merge">
+            <id>{/vlan-id}</id>
+          </vlan-list>
+        </vlan>
+        <interface xmlns="urn:ios">
+          <FastEthernet tags="nocreate"
+                        when="{starts-with($INTERFACE, 'FastEthernet')}">
+            <name>{$INTERFACE}</name>
+            <switchport>
+              <trunk>
+                <allowed>
+                  <vlan tags="merge">
+                    <vlans>{/vlan-id}</vlans>
+                  </vlan>
+                </allowed>
+              </trunk>
+            </switchport>
+          </FastEthernet>
+        </interface>
+        <interface xmlns="http://tail-f.com/ned/cisco-nx">
+          <Ethernet when="{starts-with($INTERFACE, 'Ethernet')}">
+            <name>{$INTERFACE}</name>
+            <switchport>
+              <mode>trunk</mode>
+              <trunk>
+                <allowed>
+                  <vlan tags="merge">
+                    <ids>{/vlan-id}</ids>
+                  </vlan>
+                </allowed>
+              </trunk>
+            </switchport>
+          </Ethernet>
+          <port-channel when="{starts-with($INTERFACE, 'Port-channel')}">
+            <name>{$INTERFACE}</name>
+            <switchport>
+              <mode>trunk</mode>
+              <trunk>
+                <allowed>
+                  <vlan tags="merge">
+                    <ids>{/vlan-id}</ids>
+                  </vlan>
+                </allowed>
+              </trunk>
+            </switchport>
+          </port-channel>
+        </interface>
+      </config>
+    </device>
+  </devices>
+</config-template>

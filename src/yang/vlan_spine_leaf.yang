@@ -1,0 +1,109 @@
+module vlan_spine_leaf {
+
+  namespace "http://example.com/vlan_spine_leaf";
+  prefix vlan_spine_leaf;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  description
+    "Service to provision VLANs across devices in a leaf-spine topology.";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.";
+  }
+
+  typedef vlan-list-type {
+    type uint16 {
+      range "1..3967|4048..4093";
+      tailf:info "<1-3967,4048-4093>  VLAN IDs of the allowed VLANs "
+      +"when this port in trunking mode";
+    }
+  }
+
+  grouping connection-grouping {
+    leaf device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+    leaf interface {
+      type string;
+    }
+  }
+
+  container topology {
+    list role {
+      key "role";
+      tailf:cli-compact-syntax;
+      leaf role {
+        type enumeration {
+          enum spine;
+          enum leaf;
+        }
+      }
+
+      leaf-list device {
+        type leafref {
+          path "/ncs:devices/ncs:device/ncs:name";
+        }
+      }
+    }
+
+    list connection {
+      key "name";
+      leaf name {
+        type string;
+      }
+      container endpoint-1 {
+        tailf:cli-compact-syntax;
+        uses connection-grouping;
+      }
+      container endpoint-2 {
+        tailf:cli-compact-syntax;
+        uses connection-grouping;
+      }
+    }
+  }
+
+
+  list vlan_spine_leaf {
+    description "This is an RFS skeleton service";
+
+    key name;
+    leaf name {
+      tailf:info "Unique service id";
+      tailf:cli-allow-range;
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint vlan_spine_leaf-servicepoint;
+
+    leaf vlan-id {
+      // tailf:cli-drop-node-name;
+      // tailf:cli-range-list-syntax;
+      type vlan-list-type;        
+    }
+
+    list device-if {
+      key "device-name";
+        leaf device-name {
+          type leafref {
+            path "/ncs:devices/ncs:device/ncs:name";
+          }
+        }
+        leaf interface {
+          type string;
+        }
+    }
+  }
+}
