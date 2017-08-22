@@ -16,7 +16,7 @@
         <interface xmlns="urn:ios">
           <FastEthernet tags="nocreate"
                         when="{starts-with($INTERFACE, 'FastEthernet')}">
-            <name>{$INTERFACE}</name>
+            <name>{substring-after($INTERFACE, 'FastEthernet')}</name>
             <switchport>
               <trunk>
                 <allowed>
@@ -30,7 +30,7 @@
         </interface>
         <interface xmlns="http://tail-f.com/ned/cisco-nx">
           <Ethernet when="{starts-with($INTERFACE, 'Ethernet')}">
-            <name>{$INTERFACE}</name>
+            <name>{substring-after($INTERFACE, 'Ethernet')}</name>
             <switchport>
               <mode>trunk</mode>
               <trunk>
@@ -43,7 +43,7 @@
             </switchport>
           </Ethernet>
           <port-channel when="{starts-with($INTERFACE, 'Port-channel')}">
-            <name>{$INTERFACE}</name>
+            <name>{substring-after($INTERFACE, 'Port-channel')}</name>
             <switchport>
               <mode>trunk</mode>
               <trunk>
