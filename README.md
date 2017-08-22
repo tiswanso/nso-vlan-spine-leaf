@@ -1,10 +1,11 @@
-h1. NSO VLAN Spine-Leaf Service Package
+NSO VLAN Spine-Leaf Service Package
+===================================
 
-h2. Summary
+## Summary
 A NSO service to provision access VLANs across L2 Spine-Leaf fabrics.  The implementation is very similar to the NSO example '17-mpls-vpn-python' -- examples.ncs/getting-started/developing-with-ncs/17-mpls-vpn-python/.
 
-h2. Implementation Summary
-==== Topology
+## Implementation Summary
+### Topology
 
 The service configuration only has references to Leaf devices for the
 access end-points of the VLAN. The service mapping logic reads from a simple
@@ -18,26 +19,26 @@ find out which Leaf-Spine connections to configure for plumbing the VLAN
 across the fabric.
 
 
-==== VLAN Access Endpoints
+### VLAN Access Endpoints
 
 The service configuration specifies the access leaf switches' ports for a VLAN.
 This list associates a VLAN ID with a set of leaf device, interface tuples.
 
-h2. REST Client Scripts
-h3. setup_topo.py
+## REST Client Scripts
+### setup_topo.py
 Configures a simulated test topology of 6 nx devices.  Assumes the specific
 netsim setup:
-    ncs-netsim create-network $NCS_DIR/packages/neds/cisco-nx 6 nx
-     (device names nx0 - nx5)
+  - ```ncs-netsim create-network $NCS_DIR/packages/neds/cisco-nx 6 nx```
+     - sets up device names nx0 - nx5
 
-  - topo:
-      spine: [ nx0, nx1 ]
-      leaf: [ nx2, nx3, nx4, nx5 ]
+  - topo configured:
+     - spine: [ nx0, nx1 ]
+     - leaf: [ nx2, nx3, nx4, nx5 ]
 
-h3. create_leaf_endpoints.py
+### create_leaf_endpoints.py
 Example script to create leaf vlan access endpoints.
 
-'''
+```
 ~/ncs-dev/test ./create_leaf_endpoint.py --name tb2_mgmt --vlan 1201 --device nx4 --interface Ethernet1/21
 Got endpoint tb2_mgmt
 {
@@ -60,4 +61,4 @@ Got endpoint tb2_mgmt
     }
   }
 }
-'''
+```
